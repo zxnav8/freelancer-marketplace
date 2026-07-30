@@ -1,0 +1,82 @@
+.hire-requests{
+    min-height:100vh;
+    background:#f5f7fa;
+    padding:40px 8%;
+}
+
+.hire-requests h1{
+    margin-bottom:30px;
+    color:#1f2937;
+}
+
+.request-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+    gap:25px;
+}
+
+.request-card{
+    background:#fff;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.request-card:hover{
+    transform:translateY(-5px);
+}
+
+.request-card h2{
+    color:#2563eb;
+    margin-bottom:15px;
+}
+
+.request-card p{
+    color:#555;
+    margin:8px 0;
+    line-height:1.6;
+}
+
+.empty-box{
+    background:white;
+    padding:40px;
+    border-radius:16px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+.request-actions{
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+}
+
+.accept-btn{
+    flex:1;
+    padding:12px;
+    background:#22c55e;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.accept-btn:hover{
+    background:#16a34a;
+}
+
+.reject-btn{
+    flex:1;
+    padding:12px;
+    background:#ef4444;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.reject-btn:hover{
+    background:#dc2626;
+}

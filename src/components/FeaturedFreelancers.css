@@ -1,0 +1,85 @@
+.freelancers {
+  padding: 80px 10%;
+  background: #f8fafc;
+}
+
+.freelancers h2 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.freelancers p {
+  text-align: center;
+  color: gray;
+  margin-bottom: 40px;
+}
+
+.freelancer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.freelancer-card {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.freelancer-card:hover {
+  transform: translateY(-8px);
+}
+
+.freelancer-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.freelancer-card h3 {
+  margin-top: 15px;
+}
+
+.rating {
+  margin: 10px 0;
+  color: #f59e0b;
+  font-weight: bold;
+}
+
+.freelancer-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.view-btn,
+.hire-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.view-btn {
+  background: #e5e7eb;
+}
+
+.hire-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.view-btn:hover {
+  background: #d1d5db;
+}
+
+.hire-btn:hover {
+  background: #1d4ed8;
+}

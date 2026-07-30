@@ -1,0 +1,50 @@
+.notifications{
+    min-height:100vh;
+    background:#f5f7fa;
+    padding:40px 8%;
+}
+
+.notifications h1{
+    margin-bottom:30px;
+    color:#1f2937;
+}
+
+.notification-list{
+    display:grid;
+    gap:20px;
+}
+
+.notification-card{
+    background:#fff;
+    padding:22px;
+    border-radius:16px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.notification-card:hover{
+    transform:translateY(-5px);
+}
+
+.notification-card h3{
+    color:#2563eb;
+    margin-bottom:10px;
+}
+.notification-card p{
+    color:#555;
+    line-height:1.6;
+    margin-bottom:12px;
+}
+
+.notification-card span{
+    color:#888;
+    font-size:14px;
+}
+
+.notification-box{
+    background:#fff;
+    padding:40px;
+    border-radius:16px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}

@@ -1,0 +1,136 @@
+.orders {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 40px;
+}
+
+.orders h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2563eb;
+}
+
+.order-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.order-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.order-card h3 {
+  color: #2563eb;
+  margin-bottom: 15px;
+}
+
+.order-card p {
+  margin: 8px 0;
+  color: #444;
+}
+
+.complete-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #22c55e;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  }
+
+.complete-btn:hover {
+  background: #16a34a;
+}
+
+.empty-box {
+  background: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.empty-box h3 {
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+
+.empty-box p {
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .orders {
+    padding: 20px;
+  }
+
+  .order-list {
+    grid-template-columns: 1fr;
+  }
+}
+.review-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.review-box {
+  width: 450px;
+  max-width: 95%;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.review-box h2 {
+  margin-bottom: 20px;
+  color: #2563eb;
+}
+
+.review-box label {
+  display: block;
+  margin: 15px 0 8px;
+  font-weight: 600;
+}
+
+.review-box select,
+.review-box textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  font-size: 15px;
+}
+
+.review-box textarea {
+  resize: vertical;
+}
+.pay-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pay-btn:hover {
+  background: #1d4ed8;
+}

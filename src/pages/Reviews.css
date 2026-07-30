@@ -1,0 +1,99 @@
+.reviews {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 40px;
+}
+
+.reviews h1 {
+  text-align: center;
+  color: #2563eb;
+  margin-bottom: 30px;
+}
+
+.rating-box {
+  max-width: 400px;
+  margin: 0 auto 30px;
+  background: white;
+  text-align: center;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.rating-box h2 {
+  color: #f59e0b;
+  margin-bottom: 10px;
+}
+
+.rating-box p {
+  color: #666;
+}
+
+.review-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px,1fr));
+  gap: 20px;
+}
+
+.review-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.review-card h2 {
+  color: #2563eb;
+  margin-bottom: 15px;
+}
+
+.review-card p {
+  margin: 8px 0;
+  color: #444;
+}
+
+.review-card .delete-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #ef4444;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.review-card .delete-btn:hover {
+  background: #dc2626;
+}
+
+.empty-box {
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  text-align: center;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.empty-box h2 {
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+
+.empty-box p {
+  color: #666;
+}
+
+@media (max-width:768px) {
+  .reviews {
+    padding: 20px;
+  }
+
+  .review-list {
+    grid-template-columns: 1fr;
+  }
+}
