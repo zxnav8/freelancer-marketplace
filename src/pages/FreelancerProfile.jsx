@@ -8,48 +8,76 @@ function FreelancerProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
 
   const freelancer = freelancers.find(
     (item) => item.id === Number(id)
   );
 
-  const [saved, setSaved] = useState(() => {
-    const savedFreelancers =
-      JSON.parse(localStorage.getItem("savedFreelancers")) || [];
+  const storageKey = currentUser
+    ? `savedFreelancers_${currentUser.email}`
+    : null;
 
-    return savedFreelancers.some((item) => item.id === Number(id));
+  const [saved, setSaved] = useState(() => {
+    if (!storageKey) return false;
+
+    const savedFreelancers =
+      JSON.parse(localStorage.getItem(storageKey)) || [];
+
+    return savedFreelancers.some(
+      (item) => item.id === Number(id)
+    );
   });
 
   if (!freelancer) {
-    return <h2 style={{ textAlign: "center" }}>Freelancer Not Found</h2>;
+    return (
+      <h2 style={{ textAlign: "center" }}>
+        Freelancer Not Found
+      </h2>
+    );
   }
 
   const handleHire = () => {
-    if (!user) {
+    if (!currentUser) {
       alert("Please login first!");
       navigate("/login");
       return;
     }
 
-    alert(`Hire request sent to ${freelancer.name}`);
+    navigate(`/hire/${freelancer.id}`);
+  };
+
+  const handleChat = () => {
+    if (!currentUser) {
+      alert("Please login first!");
+      navigate("/login");
+      return;
+    }
+
+    navigate(`/chat/${freelancer.id}`);
   };
 
   const handleSave = () => {
-    if (!user) {
+    if (!currentUser) {
       alert("Please login first!");
       navigate("/login");
       return;
     }
 
     let savedFreelancers =
-      JSON.parse(localStorage.getItem("savedFreelancers")) || [];
+      JSON.parse(localStorage.getItem(storageKey)) || [];
 
-    if (!savedFreelancers.some((item) => item.id === freelancer.id)) {
+    if (
+      !savedFreelancers.some(
+        (item) => item.id === freelancer.id
+      )
+    ) {
       savedFreelancers.push(freelancer);
 
       localStorage.setItem(
-        "savedFreelancers",
+        storageKey,
         JSON.stringify(savedFreelancers)
       );
 
@@ -67,8 +95,10 @@ function FreelancerProfile() {
 
       <div className="profile-container">
         <div className="profile-card">
-
-          <img src={freelancer.image} alt={freelancer.name} />
+          <img
+            src={freelancer.image}
+            alt={freelancer.name}
+          />
 
           <h1>{freelancer.name}</h1>
 
@@ -77,7 +107,8 @@ function FreelancerProfile() {
           <p>📍 {freelancer.location}</p>
 
           <div className="profile-rating">
-            ⭐ {freelancer.rating} ({freelancer.reviews} Reviews)
+            ⭐ {freelancer.rating} (
+            {freelancer.reviews} Reviews)
           </div>
 
           <div className="profile-info">
@@ -104,34 +135,27 @@ function FreelancerProfile() {
           <h2>Skills</h2>
 
           <div className="skills">
-            {freelancer.skills.map((skill, index) => (
-              <span key={index}>{skill}</span>
-            ))}
+            {freelancer.skills.map(
+              (skill, index) => (
+                <span key={index}>{skill}</span>
+              )
+            )}
           </div>
 
           <div className="profile-buttons">
+            <button
+              className="post-btn"
+              onClick={handleHire}
+            >
+              Hire Freelancer
+            </button>
 
             <button
-  className="post-btn"
-  onClick={() => navigate(`/hire/${freelancer.id}`)}
->
-  Hire Freelancer
-</button>
-
-           <button
-  className="chat-btn"
-  onClick={() => {
-    if (!user) {
-      alert("Please login first!");
-      navigate("/login");
-      return;
-    }
-
-    navigate(`/chat/${freelancer.id}`);
-  }}
->
-  Chat
-</button>
+              className="chat-btn"
+              onClick={handleChat}
+            >
+              Chat
+            </button>
 
             <button
               className="view-btn"
@@ -139,9 +163,7 @@ function FreelancerProfile() {
             >
               {saved ? "❤️ Saved" : "🤍 Save"}
             </button>
-
           </div>
-
         </div>
       </div>
     </>

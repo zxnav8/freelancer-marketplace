@@ -7,6 +7,15 @@ function Payment() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
+
+  if (!currentUser) {
+    navigate("/login");
+    return null;
+  }
+
   const order = location.state?.order;
 
   const [paymentMethod, setPaymentMethod] = useState("UPI");
@@ -19,6 +28,7 @@ function Payment() {
         <div className="payment-container">
           <div className="payment-card">
             <h2>No Order Found</h2>
+
             <button
               className="pay-btn"
               onClick={() => navigate("/orders")}
@@ -31,12 +41,15 @@ function Payment() {
     );
   }
 
+  const paymentsKey = `payments_${currentUser.email}`;
+  const notificationsKey = `notifications_${currentUser.email}`;
+
   const handlePayment = () => {
     setLoading(true);
 
     setTimeout(() => {
       const payments =
-        JSON.parse(localStorage.getItem("payments")) || [];
+        JSON.parse(localStorage.getItem(paymentsKey)) || [];
 
       payments.unshift({
         id: Date.now(),
@@ -51,12 +64,14 @@ function Payment() {
       });
 
       localStorage.setItem(
-        "payments",
+        paymentsKey,
         JSON.stringify(payments)
       );
 
       const notifications =
-        JSON.parse(localStorage.getItem("notifications")) || [];
+        JSON.parse(
+          localStorage.getItem(notificationsKey)
+        ) || [];
 
       notifications.unshift({
         id: Date.now() + 1,
@@ -66,7 +81,7 @@ function Payment() {
       });
 
       localStorage.setItem(
-        "notifications",
+        notificationsKey,
         JSON.stringify(notifications)
       );
 
@@ -84,15 +99,16 @@ function Payment() {
 
       <div className="payment-container">
         <div className="payment-card">
-
           <h2>Complete Payment</h2>
 
           <p>
-            <strong>Project:</strong> {order.projectTitle}
+            <strong>Project:</strong>{" "}
+            {order.projectTitle}
           </p>
 
           <p>
-            <strong>Freelancer:</strong> {order.freelancerName}
+            <strong>Freelancer:</strong>{" "}
+            {order.freelancerName}
           </p>
 
           <p>
@@ -118,9 +134,10 @@ function Payment() {
             onClick={handlePayment}
             disabled={loading}
           >
-            {loading ? "Processing..." : "Pay Now"}
+            {loading
+              ? "Processing..."
+              : "Pay Now"}
           </button>
-
         </div>
       </div>
     </>

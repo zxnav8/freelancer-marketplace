@@ -7,10 +7,15 @@ function Freelancers() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const selectedCategory = location.state?.category || "All Categories";
-  const searchText = location.state?.search?.toLowerCase() || "";
+  const selectedCategory =
+    location.state?.category || "All Categories";
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const searchText =
+    location.state?.search?.toLowerCase() || "";
+
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
 
   let filteredFreelancers = freelancers;
 
@@ -37,13 +42,13 @@ function Freelancers() {
   }
 
   const handleHire = (freelancer) => {
-    if (!user) {
+    if (!currentUser) {
       alert("Please login first!");
       navigate("/login");
       return;
     }
 
-    alert(`Hire request sent to ${freelancer.name}`);
+    navigate(`/hire/${freelancer.id}`);
   };
 
   const handleViewProfile = (id) => {
@@ -62,13 +67,21 @@ function Freelancers() {
         </h1>
 
         {filteredFreelancers.length === 0 ? (
-          <h2 style={{ textAlign: "center", marginTop: "40px" }}>
+          <h2
+            style={{
+              textAlign: "center",
+              marginTop: "40px",
+            }}
+          >
             No freelancers found.
           </h2>
         ) : (
           <div className="freelancer-grid">
             {filteredFreelancers.map((item) => (
-              <div className="freelancer-box" key={item.id}>
+              <div
+                className="freelancer-box"
+                key={item.id}
+              >
                 <img
                   src={item.image}
                   alt={item.name}
@@ -86,7 +99,9 @@ function Freelancers() {
                 <div className="freelancer-actions">
                   <button
                     className="view-btn"
-                    onClick={() => handleViewProfile(item.id)}
+                    onClick={() =>
+                      handleViewProfile(item.id)
+                    }
                   >
                     View Profile
                   </button>

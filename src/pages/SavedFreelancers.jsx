@@ -6,14 +6,23 @@ import "./Freelancers.css";
 function SavedFreelancers() {
   const navigate = useNavigate();
 
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
   const [savedFreelancers, setSavedFreelancers] = useState([]);
 
   useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+
+    const storageKey = `savedFreelancers_${currentUser.email}`;
+
     const data =
-      JSON.parse(localStorage.getItem("savedFreelancers")) || [];
+      JSON.parse(localStorage.getItem(storageKey)) || [];
 
     setSavedFreelancers(data);
-  }, []);
+  }, [currentUser, navigate]);
 
   const handleRemove = (id) => {
     const updated = savedFreelancers.filter(
@@ -22,8 +31,10 @@ function SavedFreelancers() {
 
     setSavedFreelancers(updated);
 
+    const storageKey = `savedFreelancers_${currentUser.email}`;
+
     localStorage.setItem(
-      "savedFreelancers",
+      storageKey,
       JSON.stringify(updated)
     );
   };
@@ -47,7 +58,10 @@ function SavedFreelancers() {
         ) : (
           <div className="freelancer-grid">
             {savedFreelancers.map((item) => (
-              <div className="freelancer-box" key={item.id}>
+              <div
+                className="freelancer-box"
+                key={item.id}
+              >
                 <img
                   src={item.image}
                   alt={item.name}

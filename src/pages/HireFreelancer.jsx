@@ -8,13 +8,22 @@ function HireFreelancer() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
+
+  if (!currentUser) {
+    navigate("/login");
+    return null;
+  }
+
   const freelancer = freelancers.find(
     (item) => item.id === Number(id)
   );
 
   const [form, setForm] = useState({
-    clientName: "",
-    email: "",
+    clientName: currentUser.name || "",
+    email: currentUser.email || "",
     projectTitle: "",
     budget: "",
     deadline: "",
@@ -43,37 +52,41 @@ function HireFreelancer() {
       return;
     }
 
+    const hireRequestsKey = `hireRequests_${freelancer.email || freelancer.id}`;
+    const notificationsKey = `notifications_${currentUser.email}`;
+
     const hireRequests =
-      JSON.parse(localStorage.getItem("hireRequests")) || [];
+      JSON.parse(localStorage.getItem(hireRequestsKey)) || [];
 
     hireRequests.push({
       id: Date.now(),
       freelancerId: freelancer.id,
       freelancerName: freelancer.name,
       freelancerTitle: freelancer.title,
+      clientEmail: currentUser.email,
       status: "Pending",
       ...form,
     });
 
     localStorage.setItem(
-      "hireRequests",
+      hireRequestsKey,
       JSON.stringify(hireRequests)
     );
 
     const notifications =
-  JSON.parse(localStorage.getItem("notifications")) || [];
+      JSON.parse(localStorage.getItem(notificationsKey)) || [];
 
-notifications.unshift({
-  id: Date.now(),
-  title: "New Hire Request",
-  message: `${form.clientName} sent a hire request for "${form.projectTitle}".`,
-  time: new Date().toLocaleString(),
-});
+    notifications.unshift({
+      id: Date.now() + 1,
+      title: "Hire Request Sent",
+      message: `Your hire request for "${form.projectTitle}" has been sent to ${freelancer.name}.`,
+      time: new Date().toLocaleString(),
+    });
 
-localStorage.setItem(
-  "notifications",
-  JSON.stringify(notifications)
-);
+    localStorage.setItem(
+      notificationsKey,
+      JSON.stringify(notifications)
+    );
 
     alert("Hire request sent successfully!");
 
@@ -84,7 +97,12 @@ localStorage.setItem(
     return (
       <>
         <Navbar />
-        <h2 style={{ textAlign: "center", marginTop: "60px" }}>
+        <h2
+          style={{
+            textAlign: "center",
+            marginTop: "60px",
+          }}
+        >
           Freelancer Not Found
         </h2>
       </>
@@ -96,15 +114,13 @@ localStorage.setItem(
       <Navbar />
 
       <div className="hire-page">
-
         <div className="hire-card">
-
           <h2>Hire {freelancer.name}</h2>
 
           <p>{freelancer.title}</p>
 
           <form onSubmit={submitRequest}>
-                        <input
+            <input
               type="text"
               name="clientName"
               placeholder="Your Name"
@@ -149,16 +165,16 @@ localStorage.setItem(
               rows="6"
               value={form.description}
               onChange={handleChange}
-            ></textarea>
+            />
 
-            <button type="submit" className="hire-btn">
+            <button
+              type="submit"
+              className="hire-btn"
+            >
               Send Hire Request
             </button>
-
           </form>
-
         </div>
-
       </div>
     </>
   );

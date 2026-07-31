@@ -6,8 +6,22 @@ import "./Orders.css";
 function Orders() {
   const navigate = useNavigate();
 
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
+
+  if (!currentUser) {
+    navigate("/login");
+    return null;
+  }
+
+  const ordersKey = `orders_${currentUser.email}`;
+  const paymentsKey = `payments_${currentUser.email}`;
+  const reviewsKey = `reviews_${currentUser.email}`;
+  const notificationsKey = `notifications_${currentUser.email}`;
+
   const [orders, setOrders] = useState(
-    JSON.parse(localStorage.getItem("orders")) || []
+    JSON.parse(localStorage.getItem(ordersKey)) || []
   );
 
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -15,19 +29,22 @@ function Orders() {
   const [comment, setComment] = useState("");
 
   const payments =
-    JSON.parse(localStorage.getItem("payments")) || [];
+    JSON.parse(localStorage.getItem(paymentsKey)) || [];
 
   const updateStatus = (id, status) => {
     const updatedOrders = orders.map((order) =>
       order.id === id
-        ? { ...order, status }
+        ? {
+            ...order,
+            status,
+          }
         : order
     );
 
     setOrders(updatedOrders);
 
     localStorage.setItem(
-      "orders",
+      ordersKey,
       JSON.stringify(updatedOrders)
     );
   };
@@ -44,7 +61,7 @@ function Orders() {
     if (!selectedOrder) return;
 
     const reviews =
-      JSON.parse(localStorage.getItem("reviews")) || [];
+      JSON.parse(localStorage.getItem(reviewsKey)) || [];
 
     reviews.unshift({
       id: Date.now(),
@@ -58,12 +75,14 @@ function Orders() {
     });
 
     localStorage.setItem(
-      "reviews",
+      reviewsKey,
       JSON.stringify(reviews)
     );
 
     const notifications =
-      JSON.parse(localStorage.getItem("notifications")) || [];
+      JSON.parse(
+        localStorage.getItem(notificationsKey)
+      ) || [];
 
     notifications.unshift({
       id: Date.now() + 1,
@@ -73,7 +92,7 @@ function Orders() {
     });
 
     localStorage.setItem(
-      "notifications",
+      notificationsKey,
       JSON.stringify(notifications)
     );
 
@@ -83,38 +102,28 @@ function Orders() {
     setRating(5);
     setComment("");
   };
-
-  return (
+    return (
     <>
       <Navbar />
 
       <div className="orders">
-
         <h2>My Orders</h2>
 
         {orders.length === 0 ? (
-
           <div className="empty-box">
-
             <h3>No Orders Found</h3>
 
             <p>
               Accepted hire requests will appear here.
             </p>
-
           </div>
-
         ) : (
-
           <div className="order-list">
-
             {orders.map((order) => (
-
               <div
                 key={order.id}
                 className="order-card"
               >
-
                 <h3>{order.projectTitle}</h3>
 
                 <p>
@@ -128,8 +137,8 @@ function Orders() {
                 </p>
 
                 <p>
-                  <strong>Budget:</strong>
-                  ₹{order.budget}
+                  <strong>Budget:</strong> ₹
+                  {order.budget}
                 </p>
 
                 <p>
@@ -150,7 +159,6 @@ function Orders() {
                 </p>
 
                 {!isPaid(order.id) ? (
-
                   <button
                     className="pay-btn"
                     onClick={() =>
@@ -161,10 +169,8 @@ function Orders() {
                   >
                     Pay Now
                   </button>
-
                 ) : order.status !==
                   "Completed" ? (
-
                   <button
                     className="complete-btn"
                     onClick={() =>
@@ -173,32 +179,22 @@ function Orders() {
                   >
                     Complete & Review
                   </button>
-
                 ) : (
-
                   <button
                     className="complete-btn"
                     disabled
                   >
                     Completed
                   </button>
-
                 )}
-
               </div>
-
             ))}
-
           </div>
-
         )}
 
         {selectedOrder && (
-
           <div className="review-modal">
-
             <div className="review-box">
-
               <h2>Write Review</h2>
 
               <label>Rating</label>
@@ -209,27 +205,21 @@ function Orders() {
                   setRating(Number(e.target.value))
                 }
               >
-
                 <option value={5}>
                   ⭐⭐⭐⭐⭐
                 </option>
-
                 <option value={4}>
                   ⭐⭐⭐⭐
                 </option>
-
                 <option value={3}>
                   ⭐⭐⭐
                 </option>
-
                 <option value={2}>
                   ⭐⭐
                 </option>
-
                 <option value={1}>
                   ⭐
                 </option>
-
               </select>
 
               <label>Comment</label>
@@ -241,7 +231,8 @@ function Orders() {
                   setComment(e.target.value)
                 }
               />
-                            <div
+
+              <div
                 style={{
                   display: "flex",
                   gap: "10px",
@@ -266,15 +257,10 @@ function Orders() {
                   Cancel
                 </button>
               </div>
-
             </div>
-
           </div>
-
         )}
-
       </div>
-
     </>
   );
 }

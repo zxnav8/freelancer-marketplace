@@ -18,20 +18,25 @@ function Signup() {
       return;
     }
 
-    const existingUser = JSON.parse(localStorage.getItem("user"));
+    const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    if (existingUser && existingUser.email === email) {
+    const existingUser = users.find((user) => user.email === email);
+
+    if (existingUser) {
       alert("Account already exists. Please Login.");
       return;
     }
 
-    const user = {
+    const newUser = {
+      id: Date.now(),
       name,
       email,
       password,
     };
 
-    localStorage.setItem("user", JSON.stringify(user));
+    users.push(newUser);
+
+    localStorage.setItem("users", JSON.stringify(users));
 
     alert("Account Created Successfully!");
 
@@ -41,13 +46,11 @@ function Signup() {
   return (
     <div className="signup-container">
       <div className="signup-card">
-
         <h1>Create Account</h1>
 
         <p>Join FreelancerHub Today</p>
 
         <form onSubmit={handleSubmit}>
-
           <input
             type="text"
             placeholder="Full Name"
@@ -80,17 +83,13 @@ function Signup() {
             required
           />
 
-          <button type="submit">
-            Create Account
-          </button>
-
+          <button type="submit">Create Account</button>
         </form>
 
         <div className="login-link">
           Already have an account?
           <Link to="/login"> Login</Link>
         </div>
-
       </div>
     </div>
   );

@@ -11,36 +11,32 @@ function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    const user = users.find(
+      (u) => u.email === email && u.password === password
+    );
 
     if (!user) {
-      alert("No account found. Please Signup first.");
+      alert("Invalid Email or Password");
       return;
     }
 
-    if (email === user.email && password === user.password) {
+    localStorage.setItem("currentUser", JSON.stringify(user));
 
-      // Login state save
-      localStorage.setItem("currentUser", JSON.stringify(user));
+    alert("Login Successful!");
 
-      alert("Login Successful!");
-      navigate("/dashboard");
-
-    } else {
-      alert("Invalid Email or Password");
-    }
+    navigate("/dashboard");
   };
 
   return (
     <div className="login-container">
       <div className="login-card">
-
         <h1>Welcome Back</h1>
 
         <p>Login to FreelancerHub</p>
 
         <form onSubmit={handleLogin}>
-
           <input
             type="email"
             placeholder="Email Address"
@@ -57,17 +53,13 @@ function Login() {
             required
           />
 
-          <button type="submit">
-            Login
-          </button>
-
+          <button type="submit">Login</button>
         </form>
 
         <div className="signup-link">
           Don't have an account?
           <Link to="/signup"> Sign Up</Link>
         </div>
-
       </div>
     </div>
   );

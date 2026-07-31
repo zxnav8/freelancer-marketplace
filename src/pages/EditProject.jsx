@@ -5,12 +5,25 @@ function EditProject() {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [budget, setBudget] = useState("");
 
   useEffect(() => {
-    const projects = JSON.parse(localStorage.getItem("projects")) || [];
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+
+    const storageKey = `projects_${currentUser.email}`;
+
+    const projects =
+      JSON.parse(localStorage.getItem(storageKey)) || [];
+
     const project = projects[id];
 
     if (project) {
@@ -18,20 +31,32 @@ function EditProject() {
       setDescription(project.description);
       setBudget(project.budget);
     }
-  }, [id]);
+  }, [id, currentUser, navigate]);
 
   const handleUpdate = (e) => {
     e.preventDefault();
 
-    const projects = JSON.parse(localStorage.getItem("projects")) || [];
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+
+    const storageKey = `projects_${currentUser.email}`;
+
+    const projects =
+      JSON.parse(localStorage.getItem(storageKey)) || [];
 
     projects[id] = {
+      ...projects[id],
       title,
       description,
       budget,
     };
 
-    localStorage.setItem("projects", JSON.stringify(projects));
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify(projects)
+    );
 
     alert("Project Updated Successfully!");
 

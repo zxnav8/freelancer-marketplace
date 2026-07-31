@@ -6,15 +6,31 @@ import "./Dashboard.css";
 function Dashboard() {
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
+
+  if (!currentUser) {
+    navigate("/login");
+    return null;
+  }
+
+  const projectKey = `projects_${currentUser.email}`;
+  const savedKey = `savedFreelancers_${currentUser.email}`;
+  const ordersKey = `orders_${currentUser.email}`;
+  const notificationKey = `notifications_${currentUser.email}`;
+
   const projects =
-    JSON.parse(localStorage.getItem("projects")) || [];
+    JSON.parse(localStorage.getItem(projectKey)) || [];
+
   const savedFreelancers =
-    JSON.parse(localStorage.getItem("savedFreelancers")) || [];
+    JSON.parse(localStorage.getItem(savedKey)) || [];
+
   const orders =
-    JSON.parse(localStorage.getItem("orders")) || [];
+    JSON.parse(localStorage.getItem(ordersKey)) || [];
+
   const notifications =
-    JSON.parse(localStorage.getItem("notifications")) || [];
+    JSON.parse(localStorage.getItem(notificationKey)) || [];
 
   const totalBudget = projects.reduce(
     (total, project) => total + Number(project.budget),
@@ -22,21 +38,24 @@ function Dashboard() {
   );
 
   const totalChats = freelancers.filter((item) =>
-    localStorage.getItem(`chat_${item.id}`)
+    localStorage.getItem(
+      `chat_${currentUser.email}_${item.id}`
+    )
   ).length;
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("currentUser");
     alert("Logged Out Successfully!");
-    navigate("/");
+    navigate("/login");
   };
 
   const deleteProject = (index) => {
     const updatedProjects = [...projects];
+
     updatedProjects.splice(index, 1);
 
     localStorage.setItem(
-      "projects",
+      projectKey,
       JSON.stringify(updatedProjects)
     );
 
@@ -52,7 +71,7 @@ function Dashboard() {
         <div className="dashboard-header">
           <div>
             <h1>
-              Welcome, {user ? user.name : "Guest"} 👋
+              Welcome, {currentUser.name} 👋
             </h1>
 
             <p>
@@ -101,8 +120,7 @@ function Dashboard() {
           </div>
 
         </div>
-
-        <div
+                <div
           style={{
             display: "flex",
             justifyContent: "space-between",
@@ -174,8 +192,7 @@ function Dashboard() {
             <h3>No Projects Yet</h3>
 
             <p>
-              Click on "Post Project" to create your first
-              project.
+              Click on "Post Project" to create your first project.
             </p>
           </div>
         ) : (
@@ -183,18 +200,15 @@ function Dashboard() {
             {projects.map((project, index) => (
               <div
                 className="project-box"
-                key={index}
+                key={project.id || index}
               >
                 <h3>{project.title}</h3>
 
                 <p>{project.description}</p>
 
-                <h4>
-                  Budget : ₹ {project.budget}
-                </h4>
+                <h4>Budget : ₹ {project.budget}</h4>
 
                 <div className="actions">
-
                   <button
                     className="edit-btn"
                     onClick={() =>
@@ -212,7 +226,6 @@ function Dashboard() {
                   >
                     Delete
                   </button>
-
                 </div>
               </div>
             ))}
@@ -220,7 +233,6 @@ function Dashboard() {
         )}
 
         <div style={{ marginTop: "50px" }}>
-
           <h2 style={{ marginBottom: "20px" }}>
             Recent Saved Freelancers
           </h2>
@@ -231,53 +243,40 @@ function Dashboard() {
             </div>
           ) : (
             <div className="project-list">
-              {savedFreelancers
-                .slice(0, 3)
-                .map((id) => {
+              {savedFreelancers.slice(0, 3).map((id) => {
+                const freelancer = freelancers.find(
+                  (item) => item.id === id
+                );
 
-                  const freelancer =
-                    freelancers.find(
-                      (item) => item.id === id
-                    );
+                if (!freelancer) return null;
 
-                  if (!freelancer) return null;
+                return (
+                  <div
+                    className="project-box"
+                    key={freelancer.id}
+                  >
+                    <h3>{freelancer.name}</h3>
 
-                  return (
-                    <div
-                      className="project-box"
-                      key={freelancer.id}
+                    <p>{freelancer.title}</p>
+
+                    <p>{freelancer.category}</p>
+
+                    <button
+                      className="post-btn"
+                      style={{ marginTop: "15px" }}
+                      onClick={() =>
+                        navigate(
+                          `/freelancer/${freelancer.id}`
+                        )
+                      }
                     >
-                      <h3>
-                        {freelancer.name}
-                      </h3>
-
-                      <p>
-                        {freelancer.title}
-                      </p>
-
-                      <p>
-                        {freelancer.category}
-                      </p>
-
-                      <button
-                        className="post-btn"
-                        style={{
-                          marginTop: "15px",
-                        }}
-                        onClick={() =>
-                          navigate(
-                            `/freelancer/${freelancer.id}`
-                          )
-                        }
-                      >
-                        View Profile
-                      </button>
-                    </div>
-                  );
-                })}
+                      View Profile
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           )}
-
         </div>
 
       </div>

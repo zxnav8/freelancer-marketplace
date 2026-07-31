@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import freelancers from "../data/freelancers";
@@ -6,22 +6,45 @@ import "./Chat.css";
 
 function Chat() {
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+    }
+  }, [currentUser, navigate]);
 
   const freelancer = freelancers.find(
     (item) => item.id === Number(id)
   );
 
-  const storageKey = `chat_${id}`;
+  if (!freelancer) {
+    return (
+      <h2 style={{ textAlign: "center" }}>
+        Freelancer Not Found
+      </h2>
+    );
+  }
+
+  const storageKey = currentUser
+    ? `chat_${currentUser.email}_${id}`
+    : "";
 
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
 
   useEffect(() => {
+    if (!currentUser) return;
+
     const saved =
       JSON.parse(localStorage.getItem(storageKey)) || [];
 
     setMessages(saved);
-  }, [storageKey]);
+  }, [storageKey, currentUser]);
 
   const sendMessage = () => {
     if (text.trim() === "") return;
@@ -53,13 +76,10 @@ function Chat() {
       <Navbar />
 
       <div className="chat-page">
-
         <div className="chat-box">
-
           <h2>💬 Chat with {freelancer.name}</h2>
 
           <div className="messages">
-
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -72,11 +92,9 @@ function Chat() {
                 <strong>{msg.sender}:</strong> {msg.text}
               </div>
             ))}
-
           </div>
 
           <div className="chat-input">
-
             <input
               type="text"
               placeholder="Type your message..."
@@ -89,11 +107,8 @@ function Chat() {
             <button onClick={sendMessage}>
               Send
             </button>
-
           </div>
-
         </div>
-
       </div>
     </>
   );
