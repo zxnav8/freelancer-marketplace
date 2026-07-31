@@ -18,26 +18,118 @@ import Notifications from "./pages/Notifications";
 import Orders from "./pages/Orders";
 import Payment from "./pages/Payment";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 function App() {
   return (
     <Routes>
+      {/* Public Routes */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/post-project" element={<PostProject />} />
-      <Route path="/edit-project/:id" element={<EditProject />} />
-      <Route path="/profile" element={<Profile />} />
       <Route path="/about" element={<About />} />
       <Route path="/freelancers" element={<Freelancers />} />
       <Route path="/freelancer/:id" element={<FreelancerProfile />} />
-      <Route path="/saved" element={<SavedFreelancers />} />
-      <Route path="/chat/:id" element={<Chat />} />
-      <Route path="/hire/:id" element={<HireFreelancer />} />
-      <Route path="/hire-requests" element={<HireRequests />} />
-      <Route path="/notifications" element={<Notifications />} />
-      <Route path="/orders" element={<Orders />} />
-     <Route path="/payment" element={<Payment />} />
+
+      {/* Protected Routes */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/post-project"
+        element={
+          <ProtectedRoute>
+            <PostProject />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/edit-project/:id"
+        element={
+          <ProtectedRoute>
+            <EditProject />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/saved"
+        element={
+          <ProtectedRoute>
+            <SavedFreelancers />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/chat/:id"
+        element={
+          <ProtectedRoute>
+            <Chat />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/hire/:id"
+        element={
+          <ProtectedRoute>
+            <HireFreelancer />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/hire-requests"
+        element={
+          <ProtectedRoute>
+            <HireRequests />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <Notifications />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/orders"
+        element={
+          <ProtectedRoute>
+            <Orders />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/payment"
+        element={
+          <ProtectedRoute>
+            <Payment />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

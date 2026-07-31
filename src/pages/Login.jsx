@@ -19,8 +19,13 @@ function Login() {
     }
 
     if (email === user.email && password === user.password) {
+
+      // Login state save
+      localStorage.setItem("currentUser", JSON.stringify(user));
+
       alert("Login Successful!");
       navigate("/dashboard");
+
     } else {
       alert("Invalid Email or Password");
     }
@@ -28,7 +33,6 @@ function Login() {
 
   return (
     <div className="login-container">
-
       <div className="login-card">
 
         <h1>Welcome Back</h1>
@@ -65,7 +69,6 @@ function Login() {
         </div>
 
       </div>
-
     </div>
   );
 }

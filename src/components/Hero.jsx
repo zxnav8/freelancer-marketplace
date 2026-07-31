@@ -6,7 +6,7 @@ function Hero() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const handleSearch = () => {
     if (search.trim() === "") {
@@ -22,15 +22,21 @@ function Hero() {
   };
 
   const handleHire = () => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+
     navigate("/freelancers");
   };
 
   const handleBecome = () => {
-    if (user) {
-      navigate("/dashboard");
-    } else {
-      navigate("/signup");
+    if (!currentUser) {
+      navigate("/login");
+      return;
     }
+
+    navigate("/dashboard");
   };
 
   return (

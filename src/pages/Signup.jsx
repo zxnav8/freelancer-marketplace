@@ -18,6 +18,13 @@ function Signup() {
       return;
     }
 
+    const existingUser = JSON.parse(localStorage.getItem("user"));
+
+    if (existingUser && existingUser.email === email) {
+      alert("Account already exists. Please Login.");
+      return;
+    }
+
     const user = {
       name,
       email,
@@ -33,7 +40,6 @@ function Signup() {
 
   return (
     <div className="signup-container">
-
       <div className="signup-card">
 
         <h1>Create Account</h1>
@@ -86,7 +92,6 @@ function Signup() {
         </div>
 
       </div>
-
     </div>
   );
 }

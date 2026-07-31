@@ -5,16 +5,16 @@ import freelancers from "../data/freelancers";
 function FeaturedFreelancers() {
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const handleHire = (freelancer) => {
-    if (!user) {
+    if (!currentUser) {
       alert("Please login first!");
       navigate("/login");
       return;
     }
 
-    alert(`Hire request sent to ${freelancer.name}`);
+    navigate(`/hire/${freelancer.id}`);
   };
 
   const handleViewProfile = (id) => {

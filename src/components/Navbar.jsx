@@ -1,12 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 function Navbar() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    window.location.href = "/";
+    localStorage.removeItem("currentUser");
+    alert("Logged Out Successfully!");
+    navigate("/login");
   };
 
   return (
@@ -34,15 +37,15 @@ function Navbar() {
         </li>
 
         <li>
-          <Link to="/post-project">Projects</Link>
-        </li>
-
-        <li>
           <Link to="/about">About</Link>
         </li>
 
-        {user && (
+        {currentUser ? (
           <>
+            <li>
+              <Link to="/post-project">Projects</Link>
+            </li>
+
             <li>
               <Link to="/saved">❤️ Saved</Link>
             </li>
@@ -54,11 +57,7 @@ function Navbar() {
             <li>
               <Link to="/notifications">🔔 Notifications</Link>
             </li>
-          </>
-        )}
 
-        {user ? (
-          <>
             <li>
               <Link to="/dashboard">Dashboard</Link>
             </li>
